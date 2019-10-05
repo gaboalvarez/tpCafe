@@ -3,64 +3,71 @@ object cafeteria{
 	var clientesEsperando = 0
 	var plata = 100
 	var granosCafe = 100
+	var granosCafeMolidos = 0
 	var leche = 100
-	
-	method clientesEsperando(){
-		return clientesEsperando
+	method granosCafe(){
+		return granosCafe
 	}
-	
-	method cafesListos(){
-		return (cafesListos.size())
+	method granosCafeMolidos(){
+		return granosCafeMolidos
 	}
-	
-	method esRico(){
-		return plata>50
+	method leche(){
+		return leche
 	}
-	
-	method atenderCliente(){
-		clientesEsperando +=1
-		plata +=5
+	method modificarGranosMolidos(cantActualizada){
+		granosCafeMolidos = cantActualizada
 	}
-	
-	method darPedido(){
-		if(clientesEsperando>0){
-			if(cafesListos.size() > 0){
-				clientesEsperando -=1
-				cafesListos.remove(cafesListos.first())
-			}else{
-				throw new Exception(message="no hay suficientes cafes listos")
-			}
-		}else{
-			throw new Exception(message="no hay clientes en espera")
-		}
+	method modificarGranosCafe(cantActualizada){
+		granosCafe = cantActualizada
 	}
-	
+	method modificarLeche(cantActualizada){
+		leche = cantActualizada
+	}
 	method comprarIngredientes(){
-		if(plata >=20){
-			granosCafe +=10
-			leche +=10
-			plata -=20
-		}else{
-			throw new Exception(message="no hay suficiente plata")
+		plata -=20
+		granosCafe += 10
+		leche +=10
+	}
+	method puedeHacerCafe(){
+		return ((granosCafeMolidos >=5) and(leche>=5))
+	}
+	method hacerCafe(){
+		if(!(self.puedeHacerCafe())){
+			throw new Exception(message="No se puede hacer el cafe")
+		}
+		if(self.puedeHacerCafe()){
+			if(plata>=50){
+				maquina.hacerCafe(10)
+			}else{
+				maquina.hacerCafe(5)
+			}
 		}
 	}
-	
-	method hacerCafe(){
-		if(plata<5){
-			throw new Exception(message="no hay suficiente plata")
-		}
-		if(self.esRico()){
-			maquina.hacerCafe(10)
-			granosCafe -=10
-			leche -=10
-		}else{
-			maquina.hacerCafePeor(granosCafe,leche)
-		}
-		cafesListos.add(maquina)
+	method molerGranos(){
+		maquina.moler(10)
 	}
 }
-// arreglar los throws, menos ifs
 
 object maquina{
-	
+	var granosCafe
+	var leche
+	var granosCafeMolidos
+	const limite = 80
+	method moler(cant_a_moler){
+		granosCafe = cafeteria.granosCafe()
+		granosCafeMolidos = cafeteria.granosCafeMolidos()
+		if((granosCafeMolidos +1) > limite){
+			throw new Exception(message="no se puede moler mas granos")
+		}
+		if(granosCafeMolidos <= limite){
+			cafeteria.modificarGranosCafe(granosCafe - cant_a_moler)
+			cafeteria.modificarGranosMolidos(granosCafeMolidos + cant_a_moler)	
+		}
+	}
+	method hacerCafe(cant_a_usar){
+		granosCafeMolidos = cafeteria.granosCafeMolidos()
+		leche = cafeteria.leche()
+		cafeteria.modificarGranosMolidos(granosCafeMolidos - cant_a_usar)
+		cafeteria.modificarLeche(leche - cant_a_usar)
+	}
 }
