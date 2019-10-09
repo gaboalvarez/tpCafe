@@ -1,5 +1,7 @@
 object cafeteria{
 	var cafesListos = []
+	var nada = []
+	var pedidos = []
 	var clientesEsperando = 0
 	var plata = 100
 	var granosCafe = 100
@@ -41,10 +43,34 @@ object cafeteria{
 			}else{
 				maquina.hacerCafe(5)
 			}
+			cafesListos.add(pedidos.first())
+			pedidos.remove(pedidos.first())
 		}
+	}
+	method nose(x){
+		nada.add(x)
+	}
+	method mostrarNada(){
+		return nada
+	}
+	method cuantaGenteHay(){
+		return clientesEsperando
 	}
 	method molerGranos(){
 		maquina.moler(10)
+	}
+	
+	method atenderCliente(cafe){
+		clientesEsperando += 1 
+		plata += 10
+		pedidos.add(cafe)
+	}
+	method mostrarPedidos(){
+		return pedidos
+	}
+	method entregarPedidos(){
+		cafesListos.remove(cafesListos.first())
+		clientesEsperando -= 1
 	}
 }
 
@@ -69,5 +95,19 @@ object maquina{
 		leche = cafeteria.leche()
 		cafeteria.modificarGranosMolidos(granosCafeMolidos - cant_a_usar)
 		cafeteria.modificarLeche(leche - cant_a_usar)
+	}
+}
+class Cafe{
+	var porc_cafe
+	var porc_leche
+	method porc(x,y){
+		porc_cafe = x
+		porc_leche = y
+	}
+	method p_c(){
+		return porc_cafe
+	}
+	method p_l(){
+		return porc_leche
 	}
 }
