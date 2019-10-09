@@ -59,7 +59,6 @@ object cafeteria{
 	method molerGranos(){
 		maquina.moler(10)
 	}
-	
 	method atenderCliente(cafe){
 		clientesEsperando += 1 
 		plata += 10
@@ -69,6 +68,7 @@ object cafeteria{
 		return pedidos
 	}
 	method entregarPedidos(){
+		// critico.clasificar(cafesListos.first())
 		cafesListos.remove(cafesListos.first())
 		clientesEsperando -= 1
 	}
@@ -109,5 +109,10 @@ class Cafe{
 	}
 	method p_l(){
 		return porc_leche
+	}
+}
+object critico{
+	method clasificar(cafe){
+		
 	}
 }
